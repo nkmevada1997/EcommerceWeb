@@ -13,6 +13,6 @@ namespace EcommerceWeb.Repository.Models
 
         [ForeignKey("StateId")]
         [JsonIgnore]
-        public virtual required State State { get; set; }
+        public virtual State State { get; set; }
     }
 }

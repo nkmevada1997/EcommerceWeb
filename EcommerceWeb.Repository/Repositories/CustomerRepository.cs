@@ -5,6 +5,7 @@ using EcommerceWeb.Repository.Context;
 using EcommerceWeb.Repository.Models;
 using EcommerceWeb.Utility.Encode;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace EcommerceWeb.Repository.Repositories
 {
@@ -17,12 +18,22 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var customer = _mapper.Map<Customer>(request);
-                customer.Password = EncodeBase.EncodeBase64(request.Password);
-                customer.Id = Guid.NewGuid();
-                customer.CreatedBy = Guid.NewGuid();
+                await _dbContext.Customers.AddAsync(new Customer
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber,
+                    Password = EncodeBase.EncodeBase64(request.Password),
+                    DOB = request.DOB,
+                    Gender = request.Gender,
+                    CountryId = request.CountryId,
+                    StateId = request.StateId,
+                    CityId = request.CityId,
+                    CreatedDate = DateTime.UtcNow
+                });
 
-                await _dbContext.Customers.AddAsync(customer);
                 await _dbContext.SaveChangesAsync();
 
                 return new AddCustomerResponse
@@ -39,7 +50,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable To Add Customer",
-                    ExceptionMessage = ex.ToString()
+                    ErrorMessage = ex.ToString()
                 };
             }
         }
@@ -48,21 +59,14 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var customers = await _dbContext.Customers.Where(x => x.IsActive).ToListAsync();
+                var customers = await _dbContext.Customers.Where(x => x.IsActive).Include(x => x.Country).Include(x => x.State).Include(x => x.City).ToListAsync();
 
                 if (customers != null && customers.Count != 0)
                 {
-                    var result = new List<CustomerDTO>();
-
-                    foreach (var customer in customers)
-                    {
-                        result.Add(_mapper.Map<CustomerDTO>(customer));
-                    }
-
                     return new GetCustomersResponse
                     {
                         IsError = false,
-                        Result = result,
+                        Result = customers.Select(customer => _mapper.Map<CustomerDTO>(customer)).ToList(),
                         Message = "Customers Data Retreive Successfully",
                     };
                 }
@@ -81,7 +85,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Result = [],
                     Message = "Unable To Retreive Customers",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
 
@@ -115,7 +119,7 @@ namespace EcommerceWeb.Repository.Repositories
                 {
                     IsError = false,
                     Message = "Unable To Retreive Customers",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -127,7 +131,13 @@ namespace EcommerceWeb.Repository.Repositories
                 var customer = await _dbContext.Customers.FirstOrDefaultAsync(x => x.Id == Id && x.IsActive);
                 if (customer != null)
                 {
-                    customer = _mapper.Map<Customer>(request);
+                    customer.FirstName = request.FirstName;
+                    customer.LastName = request.LastName;
+                    customer.DOB = request.DOB;
+                    customer.Gender = request.Gender;
+                    customer.CountryId = request.CountryId;
+                    customer.StateId = request.StateId;
+                    customer.CityId = request.CityId;
                     customer.UpdatedDate = DateTime.UtcNow;
 
                     await _dbContext.SaveChangesAsync();
@@ -153,7 +163,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Unable to Update Customer",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -191,7 +201,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Delete Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
 

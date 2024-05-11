@@ -24,9 +24,7 @@ namespace EcommerceWeb.Entity.Models
 
     public class EditCountryRequest
     {
-        public Guid CountryId { get; set; }
-
-        public string CountryName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
     }
 
     public class EditCountryResponse : Wrapper

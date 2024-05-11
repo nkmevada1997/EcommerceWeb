@@ -6,6 +6,6 @@
 
         public required string Message { get; set; }
 
-        public string? ExceptionMessage { get; set; }
+        public string? ErrorMessage { get; set; }
     }
 }

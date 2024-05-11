@@ -17,5 +17,7 @@ namespace EcommerceWeb.Repository.Models
         public Guid? UpdatedBy { get; set; } = null;
 
         public bool IsActive { get; set; } = true;
+
+        public bool IsBlocked { get; set; } = false;
     }
 }

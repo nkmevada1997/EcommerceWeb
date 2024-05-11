@@ -3,6 +3,7 @@ using EcommerceWeb.Entity.Models;
 using EcommerceWeb.Interface;
 using EcommerceWeb.Repository.Context;
 using EcommerceWeb.Repository.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceWeb.Repository.Repositories
@@ -16,11 +17,13 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var city = _mapper.Map<City>(request);
-                city.Id = Guid.NewGuid();
-                city.CreatedDate = DateTime.UtcNow;
-
-                await _context.Cities.AddAsync(city);
+                await _context.Cities.AddAsync(new City
+                {
+                    Id = Guid.NewGuid(),
+                    Name = request.Name,
+                    StateId = request.StateId,
+                    CreatedDate = DateTime.UtcNow,
+                });
                 await _context.SaveChangesAsync();
 
                 return new AddCityResponse
@@ -28,7 +31,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = true,
                     Message = "City Added",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
             }
             catch (Exception ex)
@@ -38,7 +41,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Add City",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -79,7 +82,7 @@ namespace EcommerceWeb.Repository.Repositories
                 {
                     IsError = true,
                     Message = "Unable to Get Data",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -114,7 +117,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Result = null,
                     Message = "Unable to Fetch Data",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -127,7 +130,8 @@ namespace EcommerceWeb.Repository.Repositories
 
                 if (city != null)
                 {
-                    city = _mapper.Map<City>(request);
+                    city.Name = request.Name;
+                    city.StateId = request.StateId;
                     city.UpdatedBy = Guid.Empty;
                     city.UpdatedDate = DateTime.UtcNow;
 
@@ -138,7 +142,7 @@ namespace EcommerceWeb.Repository.Repositories
                         IsError = false,
                         Success = true,
                         Message = "City Updated",
-                        ExceptionMessage = string.Empty
+                        ErrorMessage = string.Empty
                     };
                 }
 
@@ -147,7 +151,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Record Not Found",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
 
             }
@@ -158,7 +162,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Update the Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -179,7 +183,7 @@ namespace EcommerceWeb.Repository.Repositories
                         IsError = false,
                         Success = true,
                         Message = "City Deleted",
-                        ExceptionMessage = string.Empty
+                        ErrorMessage = string.Empty
                     };
                 }
 
@@ -188,7 +192,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Record Not Found",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
             }
             catch (Exception ex)
@@ -198,7 +202,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Update the Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }

@@ -16,11 +16,14 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var state = _mapper.Map<State>(request);
-                state.Id = Guid.NewGuid();
-                state.CreatedDate = DateTime.UtcNow;
 
-                await _context.States.AddAsync(state);
+                await _context.States.AddAsync(new State
+                {
+                    Id = Guid.NewGuid(),
+                    Name = request.Name,
+                    CountryId = request.CountryId,
+                    CreatedDate = DateTime.UtcNow,
+                });
                 await _context.SaveChangesAsync();
 
                 return new AddStateResponse
@@ -28,7 +31,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = true,
                     Message = "State Added",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
             }
             catch (Exception ex)
@@ -38,7 +41,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Add State",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -47,21 +50,14 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var states = await _context.States.Where(x => x.IsActive).ToListAsync();
+                var states = await _context.States.Where(x => x.IsActive).Include(country => country.Country).ToListAsync();
 
                 if (states != null && states.Count != 0)
                 {
-                    var result = new List<StateDTO>();
-
-                    foreach (var state in states)
-                    {
-                        result.Add(_mapper.Map<StateDTO>(state));
-                    }
-
                     return new GetStatesResponse
                     {
                         IsError = false,
-                        Result = result,
+                        Result = states.Select(state => _mapper.Map<StateDTO>(state)).ToList(),
                         Message = "Record Retrieve",
                     };
                 }
@@ -79,7 +75,7 @@ namespace EcommerceWeb.Repository.Repositories
                 {
                     IsError = true,
                     Message = "Unable to Get Data",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -88,7 +84,7 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var state = await _context.Countries.FirstOrDefaultAsync(x => x.Id == Id && x.IsActive);
+                var state = await _context.States.Include(country => country.Country).FirstOrDefaultAsync(x => x.Id == Id && x.IsActive);
 
                 if (state != null)
                 {
@@ -114,7 +110,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Result = null,
                     Message = "Unable to Fetch Data",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -123,13 +119,14 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var states = await _context.States.FirstOrDefaultAsync(x => x.Id == Id && x.IsActive);
+                var state = await _context.States.FirstOrDefaultAsync(x => x.Id == Id && x.IsActive);
 
-                if (states != null)
+                if (state != null)
                 {
-                    states = _mapper.Map<State>(request);
-                    states.UpdatedBy = Guid.Empty;
-                    states.UpdatedDate = DateTime.UtcNow;
+                    state.Name = request.Name;
+                    state.CountryId = request.CountryId;
+                    state.UpdatedBy = Guid.Empty;
+                    state.UpdatedDate = DateTime.UtcNow;
 
                     await _context.SaveChangesAsync();
 
@@ -138,7 +135,7 @@ namespace EcommerceWeb.Repository.Repositories
                         IsError = false,
                         Success = true,
                         Message = "State Updated",
-                        ExceptionMessage = string.Empty
+                        ErrorMessage = string.Empty
                     };
                 }
 
@@ -147,7 +144,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Record Not Found",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
 
             }
@@ -158,7 +155,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Update the Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -179,7 +176,7 @@ namespace EcommerceWeb.Repository.Repositories
                         IsError = false,
                         Success = true,
                         Message = "State Deleted",
-                        ExceptionMessage = string.Empty
+                        ErrorMessage = string.Empty
                     };
                 }
 
@@ -188,7 +185,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Record Not Found",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
             }
             catch (Exception ex)
@@ -198,7 +195,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Update the Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }

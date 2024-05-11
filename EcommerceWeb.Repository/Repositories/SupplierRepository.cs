@@ -17,12 +17,17 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var supplier = _mapper.Map<Supplier>(request);
-                supplier.Id = Guid.NewGuid();
-                supplier.CreatedDate = DateTime.UtcNow;
-                supplier.Password = EncodeBase.EncodeBase64(request.Password);
-
-                await _context.Suppliers.AddAsync(supplier);
+                await _context.Suppliers.AddAsync(new Supplier
+                {
+                    Id = Guid.NewGuid(),
+                    Name = request.Name,
+                    Email = request.Email,
+                    Password = EncodeBase.EncodeBase64(request.Password),
+                    CountryId = request.CountryId,
+                    StateId = request.StateId,
+                    CityId = request.CityId,
+                    CreatedDate = DateTime.UtcNow,
+                });
                 await _context.SaveChangesAsync();
 
                 return new AddSupplierResponse
@@ -30,7 +35,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = true,
                     Message = "Supplier Added",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
             }
             catch (Exception ex)
@@ -40,7 +45,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Add Supplier",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -53,17 +58,10 @@ namespace EcommerceWeb.Repository.Repositories
 
                 if (suppliers != null && suppliers.Count != 0)
                 {
-                    var result = new List<SupplierDTO>();
-
-                    foreach (var supplier in suppliers)
-                    {
-                        result.Add(_mapper.Map<SupplierDTO>(supplier));
-                    }
-
                     return new GetSuppliersResponse
                     {
                         IsError = false,
-                        Result = result,
+                        Result = suppliers.Select(supplier => _mapper.Map<SupplierDTO>(supplier)).ToList(),
                         Message = "Record Retrieve",
                     };
                 }
@@ -81,7 +79,7 @@ namespace EcommerceWeb.Repository.Repositories
                 {
                     IsError = true,
                     Message = "Unable to Get Data",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -116,7 +114,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Result = null,
                     Message = "Unable to Fetch Data",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -125,13 +123,16 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var suppliers = await _context.Suppliers.FirstOrDefaultAsync(x => x.Id == Id && x.IsActive);
+                var supplier = await _context.Suppliers.FirstOrDefaultAsync(x => x.Id == Id && x.IsActive);
 
-                if (suppliers != null)
+                if (supplier != null)
                 {
-                    suppliers = _mapper.Map<Supplier>(request);
-                    suppliers.UpdatedBy = Guid.Empty;
-                    suppliers.UpdatedDate = DateTime.UtcNow;
+                    supplier.Name = request.SupplierName;
+                    supplier.CountryId = request.CountryId;
+                    supplier.StateId = request.StateId;
+                    supplier.CityId = request.CityId;
+                    supplier.UpdatedBy = Guid.Empty;
+                    supplier.UpdatedDate = DateTime.UtcNow;
 
                     await _context.SaveChangesAsync();
 
@@ -140,7 +141,7 @@ namespace EcommerceWeb.Repository.Repositories
                         IsError = false,
                         Success = true,
                         Message = "Supplier Updated",
-                        ExceptionMessage = string.Empty
+                        ErrorMessage = string.Empty
                     };
                 }
 
@@ -149,7 +150,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Record Not Found",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
 
             }
@@ -160,7 +161,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Update the Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -181,7 +182,7 @@ namespace EcommerceWeb.Repository.Repositories
                         IsError = false,
                         Success = true,
                         Message = "Supplier Deleted",
-                        ExceptionMessage = string.Empty
+                        ErrorMessage = string.Empty
                     };
                 }
 
@@ -190,7 +191,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Record Not Found",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
             }
             catch (Exception ex)
@@ -200,7 +201,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Update the Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }

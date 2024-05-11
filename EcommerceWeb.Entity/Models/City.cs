@@ -8,11 +8,13 @@ namespace EcommerceWeb.Entity.Models
         [Display(Name = "Name")]
         [DataType(DataType.Text)]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Please Enter Only Letters")]
-        public string CityName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [Display(Name = "State")]
         public Guid StateId { get; set; }
+
+        public Guid CreatedBy { get; set; }
     }
 
     public class AddCityResponse : Wrapper
@@ -37,7 +39,7 @@ namespace EcommerceWeb.Entity.Models
         [Display(Name = "Name")]
         [DataType(DataType.Text)]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Please Enter Only Letters")]
-        public string CityName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [Display(Name = "State")]

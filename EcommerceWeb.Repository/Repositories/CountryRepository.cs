@@ -16,11 +16,13 @@ namespace EcommerceWeb.Repository.Repositories
         {
             try
             {
-                var country = _mapper.Map<Country>(request);
-                country.Id = Guid.NewGuid();
-                country.CreatedDate = DateTime.UtcNow;
+                await _context.Countries.AddAsync(new Country
+                {
+                    Id = Guid.NewGuid(),
+                    Name = request.Name,
+                    CreatedDate = DateTime.UtcNow
+                });
 
-                await _context.Countries.AddAsync(country);
                 await _context.SaveChangesAsync();
 
                 return new AddCountryResponse
@@ -28,7 +30,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = true,
                     Message = "Country Added",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
             }
             catch (Exception ex)
@@ -38,7 +40,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Add Country",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -79,7 +81,7 @@ namespace EcommerceWeb.Repository.Repositories
                 {
                     IsError = true,
                     Message = "Unable to Get Data",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -114,7 +116,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Result = null,
                     Message = "Unable to Fetch Data",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -127,7 +129,7 @@ namespace EcommerceWeb.Repository.Repositories
 
                 if (country != null)
                 {
-                    country = _mapper.Map<Country>(request);
+                    country.Name = request.Name;
                     country.UpdatedBy = Guid.Empty;
                     country.UpdatedDate = DateTime.UtcNow;
 
@@ -138,7 +140,7 @@ namespace EcommerceWeb.Repository.Repositories
                         IsError = false,
                         Success = true,
                         Message = "Country Updated",
-                        ExceptionMessage = string.Empty
+                        ErrorMessage = string.Empty
                     };
                 }
 
@@ -147,7 +149,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Record Not Found",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
 
             }
@@ -158,7 +160,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Update the Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -179,7 +181,7 @@ namespace EcommerceWeb.Repository.Repositories
                         IsError = false,
                         Success = true,
                         Message = "Country Deleted",
-                        ExceptionMessage = string.Empty
+                        ErrorMessage = string.Empty
                     };
                 }
 
@@ -188,7 +190,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = false,
                     Success = false,
                     Message = "Record Not Found",
-                    ExceptionMessage = string.Empty
+                    ErrorMessage = string.Empty
                 };
             }
             catch (Exception ex)
@@ -198,7 +200,7 @@ namespace EcommerceWeb.Repository.Repositories
                     IsError = true,
                     Success = false,
                     Message = "Unable to Update the Record",
-                    ExceptionMessage = ex.Message
+                    ErrorMessage = ex.Message
                 };
             }
         }

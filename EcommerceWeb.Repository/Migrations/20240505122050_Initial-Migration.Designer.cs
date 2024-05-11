@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcommerceWeb.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240323172028_Ecommerce_Migration")]
-    partial class Ecommerce_Migration
+    [Migration("20240505122050_Initial-Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace EcommerceWeb.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBlocked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -73,6 +76,9 @@ namespace EcommerceWeb.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBlocked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -126,6 +132,9 @@ namespace EcommerceWeb.Repository.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -175,6 +184,9 @@ namespace EcommerceWeb.Repository.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -215,6 +227,9 @@ namespace EcommerceWeb.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBlocked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -270,6 +285,9 @@ namespace EcommerceWeb.Repository.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -301,12 +319,13 @@ namespace EcommerceWeb.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e80d4b03-62f0-47db-a8c3-95ac052e708f"),
+                            Id = new Guid("89c154f9-24ec-4177-a574-1ecd94287bc3"),
                             CanLogin = true,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 3, 23, 17, 20, 27, 896, DateTimeKind.Utc).AddTicks(6005),
+                            CreatedDate = new DateTime(2024, 5, 5, 12, 20, 49, 601, DateTimeKind.Utc).AddTicks(6569),
                             Email = "admin@gmail.com",
                             IsActive = false,
+                            IsBlocked = false,
                             Password = "QWRtaW5AMTIz",
                             UserName = "Admin",
                             UserType = 1

@@ -8,11 +8,11 @@ namespace EcommerceWeb.Entity.Models
         [Display(Name = "Name")]
         [DataType(DataType.Text)]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Please Enter Only Letters")]
-        public string StateName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Country Is Required")]
         [Display(Name = "Country")]
-        public Guid? CountryId { get; set; }
+        public Guid CountryId { get; set; }
     }
 
     public class AddStateResponse : Wrapper
@@ -39,7 +39,7 @@ namespace EcommerceWeb.Entity.Models
         [Display(Name = "Name")]
         [DataType(DataType.Text)]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Please Enter Only Letters")]
-        public string StateName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [Display(Name = "Country")]
@@ -58,7 +58,10 @@ namespace EcommerceWeb.Entity.Models
 
     public class StateDTO : ModelBase
     {
+        public required string Name { get; set; }
 
+        public Guid CountryId { get; set; }
+
+        public required CountryDTO Country { get; set; }
     }
-
 }

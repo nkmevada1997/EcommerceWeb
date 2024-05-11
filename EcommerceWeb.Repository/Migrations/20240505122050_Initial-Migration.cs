@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EcommerceWeb.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class Ecommerce_Migration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +25,8 @@ namespace EcommerceWeb.Repository.Migrations
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,7 +45,8 @@ namespace EcommerceWeb.Repository.Migrations
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,7 +72,8 @@ namespace EcommerceWeb.Repository.Migrations
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,7 +107,8 @@ namespace EcommerceWeb.Repository.Migrations
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,7 +152,8 @@ namespace EcommerceWeb.Repository.Migrations
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -193,7 +198,8 @@ namespace EcommerceWeb.Repository.Migrations
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -217,8 +223,8 @@ namespace EcommerceWeb.Repository.Migrations
             migrationBuilder.InsertData(
                 schema: "dbo",
                 table: "Users",
-                columns: new[] { "Id", "CanLogin", "CreatedBy", "CreatedDate", "CustomerId", "Email", "IsActive", "Password", "SupplierId", "UpdatedBy", "UpdatedDate", "UserName", "UserType" },
-                values: new object[] { new Guid("e80d4b03-62f0-47db-a8c3-95ac052e708f"), true, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2024, 3, 23, 17, 20, 27, 896, DateTimeKind.Utc).AddTicks(6005), null, "admin@gmail.com", false, "QWRtaW5AMTIz", null, null, null, "Admin", 1 });
+                columns: new[] { "Id", "CanLogin", "CreatedBy", "CreatedDate", "CustomerId", "Email", "IsActive", "IsBlocked", "Password", "SupplierId", "UpdatedBy", "UpdatedDate", "UserName", "UserType" },
+                values: new object[] { new Guid("89c154f9-24ec-4177-a574-1ecd94287bc3"), true, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2024, 5, 5, 12, 20, 49, 601, DateTimeKind.Utc).AddTicks(6569), null, "admin@gmail.com", false, false, "QWRtaW5AMTIz", null, null, null, "Admin", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_StateId",

@@ -11,8 +11,6 @@ namespace EcommerceWeb.API.Mapper
         public CityProfile()
         {
             CreateMap<City, CityDTO>().ReverseMap();
-            CreateMap<City, AddCityRequest>().ReverseMap();
-            CreateMap<City, EditCityRequest>().ReverseMap();
         }
     }
 
@@ -21,8 +19,6 @@ namespace EcommerceWeb.API.Mapper
         public CountryProfile()
         {
             CreateMap<Country, CountryDTO>().ReverseMap();
-            CreateMap<Country, AddCountryRequest>().ReverseMap();
-            CreateMap<Country, EditCountryRequest>().ReverseMap();
         }
     }
 
@@ -31,8 +27,6 @@ namespace EcommerceWeb.API.Mapper
         public CustomerProfile()
         {
             CreateMap<Customer, CustomerDTO>().ReverseMap();
-            CreateMap<Customer, AddCustomerRequest>().ReverseMap();
-            CreateMap<Customer, EditCustomerRequest>().ReverseMap();
         }
     }
 
@@ -41,8 +35,6 @@ namespace EcommerceWeb.API.Mapper
         public StateProfile()
         {
             CreateMap<State, StateDTO>().ReverseMap();
-            CreateMap<State, AddStateRequest>().ReverseMap();
-            CreateMap<State, EditStateRequest>().ReverseMap();
         }
     }
 
@@ -51,8 +43,6 @@ namespace EcommerceWeb.API.Mapper
         public SupplierProfile()
         {
             CreateMap<Supplier, SupplierDTO>().ReverseMap();
-            CreateMap<Supplier, AddSupplierRequest>().ReverseMap();
-            CreateMap<Supplier, EditSupplierRequest>().ReverseMap();
         }
     }
 

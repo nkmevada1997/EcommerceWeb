@@ -35,7 +35,7 @@ namespace EcommerceWeb.API.Controllers
         [HttpPut("edit-country/{Id}")]
         public async Task<IActionResult> EditCountry(Guid Id, [FromBody] EditCountryRequest request)
         {
-            var result = await _service.GetCountryDetail(Id);
+            var result = await _service.EditCountry(Id,request);
             return Ok(result);
         }
 
